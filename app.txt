@@ -6,342 +6,329 @@ import pandas as pd
 # Initialize the Dash app
 app = dash.Dash(__name__)
 
-# Sample data for tables (you can replace this with your own data)
-sample_data_1 = pd.DataFrame({
-    'ID': [1, 2, 3, 4, 5],
-    'Name': ['Alice Johnson', 'Bob Smith', 'Carol Davis', 'David Wilson', 'Eva Brown'],
-    'Department': ['Engineering', 'Sales', 'Marketing', 'HR', 'Finance'],
-    'Status': ['Active', 'Active', 'Inactive', 'Active', 'Active']
-})
-
-sample_data_2 = pd.DataFrame({
-    'Product': ['Product A', 'Product B', 'Product C', 'Product D', 'Product E'],
-    'Category': ['Electronics', 'Clothing', 'Books', 'Home', 'Sports'],
-    'Price': [299.99, 49.99, 19.99, 89.99, 129.99],
-    'Stock': [150, 89, 234, 67, 45]
-})
-
-sample_data_3 = pd.DataFrame({
-    'Order ID': ['ORD001', 'ORD002', 'ORD003', 'ORD004', 'ORD005'],
-    'Customer': ['John Doe', 'Jane Smith', 'Mike Johnson', 'Sarah Wilson', 'Tom Brown'],
-    'Date': ['2024-01-15', '2024-01-16', '2024-01-17', '2024-01-18', '2024-01-19'],
-    'Amount': [150.50, 89.99, 234.75, 67.25, 445.00]
-})
+# Sample data for tables
+sample_data = {
+    'analytics': pd.DataFrame({
+        'Metric': ['Revenue', 'Users', 'Conversion Rate', 'Bounce Rate'],
+        'Value': ['$125,000', '15,234', '3.2%', '42%'],
+        'Change': ['+12%', '+8%', '+0.5%', '-3%'],
+        'Status': ['Good', 'Excellent', 'Good', 'Good']
+    }),
+    'reports': pd.DataFrame({
+        'Report Name': ['Monthly Sales', 'User Engagement', 'Performance Review', 'Market Analysis'],
+        'Date': ['2024-01-15', '2024-01-14', '2024-01-13', '2024-01-12'],
+        'Status': ['Complete', 'Processing', 'Complete', 'Draft'],
+        'Size': ['2.3 MB', '1.8 MB', '4.1 MB', '1.2 MB']
+    }),
+    'settings': pd.DataFrame({
+        'Setting': ['Notifications', 'Auto-sync', 'Data Retention', 'Security Level'],
+        'Value': ['Enabled', 'Daily', '30 days', 'High'],
+        'Last Modified': ['2024-01-15', '2024-01-14', '2024-01-10', '2024-01-08'],
+        'Modified By': ['Admin', 'System', 'Admin', 'Security Team']
+    })
+}
 
 # Define the layout
 app.layout = html.Div([
+    # Header
+    html.Div([
+        html.H1("Executive Dashboard", 
+                style={
+                    'color': '#2c3e50',
+                    'margin': '0',
+                    'fontSize': '28px',
+                    'fontWeight': '300',
+                    'letterSpacing': '0.5px'
+                }),
+        html.P("Insights at your fingertips", 
+               style={
+                   'color': '#7f8c8d',
+                   'margin': '5px 0 0 0',
+                   'fontSize': '14px',
+                   'fontWeight': '300'
+               })
+    ], style={
+        'padding': '30px 40px 20px 40px',
+        'backgroundColor': '#ffffff',
+        'borderBottom': '1px solid #ecf0f1',
+        'boxShadow': '0 2px 4px rgba(0,0,0,0.02)'
+    }),
+    
     # Navigation Bar
     html.Div([
-        html.H1("Dashboard", style={
-            'color': '#2c3e50',
-            'margin': '0',
-            'fontSize': '28px',
-            'fontWeight': '600'
-        }),
         html.Div([
-            dcc.Tabs(
-                id='nav-tabs',
-                value='welcome',
-                children=[
-                    dcc.Tab(
-                        label='Welcome',
-                        value='welcome',
-                        style={
-                            'backgroundColor': '#ffffff',
-                            'color': '#2c3e50',
-                            'border': 'none',
-                            'padding': '12px 24px',
-                            'fontSize': '16px',
-                            'fontWeight': '500'
-                        },
-                        selected_style={
-                            'backgroundColor': '#3498db',
-                            'color': '#ffffff',
-                            'border': 'none',
-                            'padding': '12px 24px',
-                            'fontSize': '16px',
-                            'fontWeight': '500'
-                        }
-                    ),
-                    dcc.Tab(
-                        label='Analytics',
-                        value='analytics',
-                        style={
-                            'backgroundColor': '#ffffff',
-                            'color': '#2c3e50',
-                            'border': 'none',
-                            'padding': '12px 24px',
-                            'fontSize': '16px',
-                            'fontWeight': '500'
-                        },
-                        selected_style={
-                            'backgroundColor': '#3498db',
-                            'color': '#ffffff',
-                            'border': 'none',
-                            'padding': '12px 24px',
-                            'fontSize': '16px',
-                            'fontWeight': '500'
-                        }
-                    ),
-                    dcc.Tab(
-                        label='Reports',
-                        value='reports',
-                        style={
-                            'backgroundColor': '#ffffff',
-                            'color': '#2c3e50',
-                            'border': 'none',
-                            'padding': '12px 24px',
-                            'fontSize': '16px',
-                            'fontWeight': '500'
-                        },
-                        selected_style={
-                            'backgroundColor': '#3498db',
-                            'color': '#ffffff',
-                            'border': 'none',
-                            'padding': '12px 24px',
-                            'fontSize': '16px',
-                            'fontWeight': '500'
-                        }
-                    )
-                ],
-                style={
-                    'height': '50px',
-                    'fontFamily': 'Arial, sans-serif'
-                }
-            )
-        ])
+            html.Button("Analytics", 
+                       id='analytics-btn',
+                       className='nav-button',
+                       style={
+                           'backgroundColor': 'transparent',
+                           'border': 'none',
+                           'padding': '12px 24px',
+                           'margin': '0 8px',
+                           'color': '#7f8c8d',
+                           'fontSize': '14px',
+                           'fontWeight': '500',
+                           'cursor': 'pointer',
+                           'borderRadius': '6px',
+                           'transition': 'all 0.3s ease',
+                           'outline': 'none'
+                       }),
+            html.Button("Reports", 
+                       id='reports-btn',
+                       className='nav-button',
+                       style={
+                           'backgroundColor': 'transparent',
+                           'border': 'none',
+                           'padding': '12px 24px',
+                           'margin': '0 8px',
+                           'color': '#7f8c8d',
+                           'fontSize': '14px',
+                           'fontWeight': '500',
+                           'cursor': 'pointer',
+                           'borderRadius': '6px',
+                           'transition': 'all 0.3s ease',
+                           'outline': 'none'
+                       }),
+            html.Button("Settings", 
+                       id='settings-btn',
+                       className='nav-button',
+                       style={
+                           'backgroundColor': 'transparent',
+                           'border': 'none',
+                           'padding': '12px 24px',
+                           'margin': '0 8px',
+                           'color': '#7f8c8d',
+                           'fontSize': '14px',
+                           'fontWeight': '500',
+                           'cursor': 'pointer',
+                           'borderRadius': '6px',
+                           'transition': 'all 0.3s ease',
+                           'outline': 'none'
+                       })
+        ], style={
+            'display': 'flex',
+            'alignItems': 'center',
+            'gap': '0px'
+        })
     ], style={
-        'backgroundColor': '#ffffff',
-        'padding': '20px 40px',
-        'boxShadow': '0 2px 4px rgba(0,0,0,0.1)',
-        'borderBottom': '1px solid #ecf0f1',
-        'display': 'flex',
-        'justifyContent': 'space-between',
-        'alignItems': 'center'
+        'padding': '0 40px',
+        'backgroundColor': '#fbfcfd',
+        'borderBottom': '1px solid #ecf0f1'
     }),
-
-    # Main Content Area
-    html.Div(id='tab-content', style={
+    
+    # Content Area
+    html.Div(id='content-area', style={
         'padding': '40px',
         'backgroundColor': '#f8f9fa',
-        'minHeight': '100vh'
-    })
+        'minHeight': '600px'
+    }),
+    
+    # Store for active tab
+    dcc.Store(id='active-tab', data='home')
+    
 ], style={
-    'fontFamily': 'Arial, sans-serif',
+    'fontFamily': '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+    'backgroundColor': '#f8f9fa',
+    'minHeight': '100vh',
     'margin': '0',
-    'backgroundColor': '#f8f9fa'
+    'padding': '0'
 })
 
-
-# Callback to update content based on selected tab
-@app.callback(
-    Output('tab-content', 'children'),
-    Input('nav-tabs', 'value')
-)
-def update_content(selected_tab):
-    if selected_tab == 'welcome':
-        return html.Div([
-            # Welcome Card
+# Welcome Card Component
+def create_welcome_card():
+    return html.Div([
+        html.Div([
             html.Div([
-                html.H2("Welcome to Your Dashboard", style={
-                    'color': '#2c3e50',
-                    'marginBottom': '20px',
-                    'fontSize': '32px',
-                    'fontWeight': '300'
-                }),
-                html.P("This is your central hub for monitoring and analyzing your data. "
-                       "Use the navigation tabs above to explore different sections of your dashboard.",
+                html.H2("Welcome Back!", 
+                       style={
+                           'color': '#2c3e50',
+                           'margin': '0 0 10px 0',
+                           'fontSize': '24px',
+                           'fontWeight': '400'
+                       }),
+                html.P("Your dashboard is ready with the latest insights and data.", 
                        style={
                            'color': '#7f8c8d',
-                           'fontSize': '18px',
-                           'lineHeight': '1.6',
-                           'marginBottom': '30px'
+                           'margin': '0 0 25px 0',
+                           'fontSize': '16px',
+                           'lineHeight': '1.5'
                        }),
                 html.Div([
                     html.Div([
-                        html.H3("Quick Stats", style={
-                            'color': '#2c3e50',
-                            'fontSize': '20px',
-                            'marginBottom': '15px'
-                        }),
+                        html.H3("Quick Stats", 
+                               style={
+                                   'color': '#34495e',
+                                   'fontSize': '18px',
+                                   'fontWeight': '500',
+                                   'margin': '0 0 15px 0'
+                               }),
                         html.Div([
                             html.Div([
-                                html.H4("150", style={'color': '#3498db', 'margin': '0', 'fontSize': '24px'}),
-                                html.P("Total Users", style={'color': '#7f8c8d', 'margin': '5px 0 0 0'})
+                                html.P("Active Users", 
+                                      style={'color': '#7f8c8d', 'fontSize': '14px', 'margin': '0'}),
+                                html.P("15,234", 
+                                      style={'color': '#27ae60', 'fontSize': '20px', 'fontWeight': '600', 'margin': '0'})
                             ], style={
-                                'backgroundColor': '#ffffff',
-                                'padding': '20px',
+                                'backgroundColor': '#f8f9fa',
+                                'padding': '15px',
                                 'borderRadius': '8px',
-                                'boxShadow': '0 2px 4px rgba(0,0,0,0.1)',
                                 'textAlign': 'center',
-                                'width': '30%'
+                                'border': '1px solid #ecf0f1'
                             }),
                             html.Div([
-                                html.H4("89%", style={'color': '#27ae60', 'margin': '0', 'fontSize': '24px'}),
-                                html.P("Success Rate", style={'color': '#7f8c8d', 'margin': '5px 0 0 0'})
+                                html.P("Revenue", 
+                                      style={'color': '#7f8c8d', 'fontSize': '14px', 'margin': '0'}),
+                                html.P("$125K", 
+                                      style={'color': '#3498db', 'fontSize': '20px', 'fontWeight': '600', 'margin': '0'})
                             ], style={
-                                'backgroundColor': '#ffffff',
-                                'padding': '20px',
+                                'backgroundColor': '#f8f9fa',
+                                'padding': '15px',
                                 'borderRadius': '8px',
-                                'boxShadow': '0 2px 4px rgba(0,0,0,0.1)',
                                 'textAlign': 'center',
-                                'width': '30%'
+                                'border': '1px solid #ecf0f1'
                             }),
                             html.Div([
-                                html.H4("$12.5K", style={'color': '#e74c3c', 'margin': '0', 'fontSize': '24px'}),
-                                html.P("Revenue", style={'color': '#7f8c8d', 'margin': '5px 0 0 0'})
+                                html.P("Growth", 
+                                      style={'color': '#7f8c8d', 'fontSize': '14px', 'margin': '0'}),
+                                html.P("+12%", 
+                                      style={'color': '#e74c3c', 'fontSize': '20px', 'fontWeight': '600', 'margin': '0'})
                             ], style={
-                                'backgroundColor': '#ffffff',
-                                'padding': '20px',
+                                'backgroundColor': '#f8f9fa',
+                                'padding': '15px',
                                 'borderRadius': '8px',
-                                'boxShadow': '0 2px 4px rgba(0,0,0,0.1)',
                                 'textAlign': 'center',
-                                'width': '30%'
+                                'border': '1px solid #ecf0f1'
                             })
                         ], style={
-                            'display': 'flex',
-                            'justifyContent': 'space-between',
-                            'gap': '20px'
+                            'display': 'grid',
+                            'gridTemplateColumns': 'repeat(3, 1fr)',
+                            'gap': '15px'
                         })
                     ])
                 ])
             ], style={
-                'backgroundColor': '#ffffff',
                 'padding': '40px',
+                'backgroundColor': '#ffffff',
                 'borderRadius': '12px',
-                'boxShadow': '0 4px 6px rgba(0,0,0,0.1)',
-                'marginBottom': '30px'
+                'boxShadow': '0 4px 6px rgba(0, 0, 0, 0.05)',
+                'border': '1px solid #ecf0f1'
             })
-        ])
+        ], style={
+            'maxWidth': '800px',
+            'margin': '0 auto'
+        })
+    ])
 
-    elif selected_tab == 'analytics':
-        return html.Div([
-            html.H2("Analytics", style={
+# Table Component
+def create_table(data, table_id):
+    return html.Div([
+        dash_table.DataTable(
+            id=table_id,
+            data=data.to_dict('records'),
+            columns=[{"name": i, "id": i} for i in data.columns],
+            style_cell={
+                'textAlign': 'left',
+                'padding': '15px',
+                'fontSize': '14px',
+                'fontFamily': '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+                'border': 'none',
+                'borderBottom': '1px solid #ecf0f1'
+            },
+            style_header={
+                'backgroundColor': '#f8f9fa',
+                'fontWeight': '600',
                 'color': '#2c3e50',
-                'marginBottom': '30px',
-                'fontSize': '28px',
-                'fontWeight': '400'
-            }),
-            html.Div([
-                dash_table.DataTable(
-                    data=sample_data_1.to_dict('records'),
-                    columns=[{"name": i, "id": i} for i in sample_data_1.columns],
-                    style_cell={
-                        'textAlign': 'left',
-                        'padding': '12px',
-                        'backgroundColor': '#ffffff',
-                        'color': '#2c3e50',
-                        'fontSize': '14px',
-                        'fontFamily': 'Arial, sans-serif'
-                    },
-                    style_header={
-                        'backgroundColor': '#3498db',
-                        'color': '#ffffff',
-                        'fontWeight': '600',
-                        'textAlign': 'center',
-                        'padding': '15px'
-                    },
-                    style_data_conditional=[
-                        {
-                            'if': {'row_index': 'odd'},
-                            'backgroundColor': '#f8f9fa',
-                        }
-                    ],
-                    style_table={
-                        'borderRadius': '8px',
-                        'overflow': 'hidden',
-                        'boxShadow': '0 4px 6px rgba(0,0,0,0.1)'
-                    }
-                )
-            ])
-        ])
+                'border': 'none',
+                'borderBottom': '2px solid #ecf0f1'
+            },
+            style_data_conditional=[
+                {
+                    'if': {'row_index': 'odd'},
+                    'backgroundColor': '#fbfcfd'
+                }
+            ],
+            style_table={
+                'backgroundColor': '#ffffff',
+                'borderRadius': '8px',
+                'overflow': 'hidden',
+                'boxShadow': '0 2px 4px rgba(0, 0, 0, 0.05)',
+                'border': '1px solid #ecf0f1'
+            }
+        )
+    ], style={
+        'maxWidth': '1000px',
+        'margin': '0 auto'
+    })
 
-    elif selected_tab == 'reports':
-        return html.Div([
-            html.H2("Reports", style={
-                'color': '#2c3e50',
-                'marginBottom': '30px',
-                'fontSize': '28px',
-                'fontWeight': '400'
-            }),
-            html.Div([
-                html.H3("Product Inventory", style={
-                    'color': '#2c3e50',
-                    'marginBottom': '20px',
-                    'fontSize': '20px'
-                }),
-                dash_table.DataTable(
-                    data=sample_data_2.to_dict('records'),
-                    columns=[{"name": i, "id": i} for i in sample_data_2.columns],
-                    style_cell={
-                        'textAlign': 'left',
-                        'padding': '12px',
-                        'backgroundColor': '#ffffff',
-                        'color': '#2c3e50',
-                        'fontSize': '14px',
-                        'fontFamily': 'Arial, sans-serif'
-                    },
-                    style_header={
-                        'backgroundColor': '#27ae60',
-                        'color': '#ffffff',
-                        'fontWeight': '600',
-                        'textAlign': 'center',
-                        'padding': '15px'
-                    },
-                    style_data_conditional=[
-                        {
-                            'if': {'row_index': 'odd'},
-                            'backgroundColor': '#f8f9fa',
-                        }
-                    ],
-                    style_table={
-                        'borderRadius': '8px',
-                        'overflow': 'hidden',
-                        'boxShadow': '0 4px 6px rgba(0,0,0,0.1)',
-                        'marginBottom': '30px'
-                    }
-                )
-            ]),
-            html.Div([
-                html.H3("Recent Orders", style={
-                    'color': '#2c3e50',
-                    'marginBottom': '20px',
-                    'fontSize': '20px'
-                }),
-                dash_table.DataTable(
-                    data=sample_data_3.to_dict('records'),
-                    columns=[{"name": i, "id": i} for i in sample_data_3.columns],
-                    style_cell={
-                        'textAlign': 'left',
-                        'padding': '12px',
-                        'backgroundColor': '#ffffff',
-                        'color': '#2c3e50',
-                        'fontSize': '14px',
-                        'fontFamily': 'Arial, sans-serif'
-                    },
-                    style_header={
-                        'backgroundColor': '#e74c3c',
-                        'color': '#ffffff',
-                        'fontWeight': '600',
-                        'textAlign': 'center',
-                        'padding': '15px'
-                    },
-                    style_data_conditional=[
-                        {
-                            'if': {'row_index': 'odd'},
-                            'backgroundColor': '#f8f9fa',
-                        }
-                    ],
-                    style_table={
-                        'borderRadius': '8px',
-                        'overflow': 'hidden',
-                        'boxShadow': '0 4px 6px rgba(0,0,0,0.1)'
-                    }
-                )
-            ])
-        ])
-
+# Callback for tab switching and content updates
+@app.callback(
+    [Output('content-area', 'children'),
+     Output('analytics-btn', 'style'),
+     Output('reports-btn', 'style'),
+     Output('settings-btn', 'style'),
+     Output('active-tab', 'data')],
+    [Input('analytics-btn', 'n_clicks'),
+     Input('reports-btn', 'n_clicks'),
+     Input('settings-btn', 'n_clicks')]
+)
+def update_content(analytics_clicks, reports_clicks, settings_clicks):
+    ctx = dash.callback_context
+    
+    # Default styles for nav buttons
+    default_style = {
+        'backgroundColor': 'transparent',
+        'border': 'none',
+        'padding': '12px 24px',
+        'margin': '0 8px',
+        'color': '#7f8c8d',
+        'fontSize': '14px',
+        'fontWeight': '500',
+        'cursor': 'pointer',
+        'borderRadius': '6px',
+        'transition': 'all 0.3s ease',
+        'outline': 'none'
+    }
+    
+    active_style = {
+        'backgroundColor': '#ffffff',
+        'border': '1px solid #ecf0f1',
+        'padding': '12px 24px',
+        'margin': '0 8px',
+        'color': '#2c3e50',
+        'fontSize': '14px',
+        'fontWeight': '600',
+        'cursor': 'pointer',
+        'borderRadius': '6px',
+        'transition': 'all 0.3s ease',
+        'outline': 'none',
+        'boxShadow': '0 2px 4px rgba(0, 0, 0, 0.05)'
+    }
+    
+    # Default to home view
+    content = create_welcome_card()
+    analytics_style = default_style.copy()
+    reports_style = default_style.copy()
+    settings_style = default_style.copy()
+    active_tab = 'home'
+    
+    if ctx.triggered:
+        button_id = ctx.triggered[0]['prop_id'].split('.')[0]
+        
+        if button_id == 'analytics-btn' and analytics_clicks:
+            content = create_table(sample_data['analytics'], 'analytics-table')
+            analytics_style = active_style.copy()
+            active_tab = 'analytics'
+        elif button_id == 'reports-btn' and reports_clicks:
+            content = create_table(sample_data['reports'], 'reports-table')
+            reports_style = active_style.copy()
+            active_tab = 'reports'
+        elif button_id == 'settings-btn' and settings_clicks:
+            content = create_table(sample_data['settings'], 'settings-table')
+            settings_style = active_style.copy()
+            active_tab = 'settings'
+    
+    return content, analytics_style, reports_style, settings_style, active_tab
 
 # Run the app
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
